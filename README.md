@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -250,23 +251,6 @@
             transform: scale(1.05) translateY(-6px);
             box-shadow: 0 20px 30px -3px rgba(0, 0, 0, 0.12), 0 10px 15px -2px rgba(0, 0, 0, 0.06);
         }
-
-        .login-tab {
-            transition: all 0.2s ease;
-        }
-
-        .login-tab.active {
-            background-color: #10b981;
-            color: white;
-        }
-
-        .login-tab:not(.active) {
-            color: #6b7280;
-        }
-
-        .login-tab:not(.active):hover {
-            background-color: #f3f4f6;
-        }
     </style>
 </head>
 <body class="min-h-full bg-gray-50">
@@ -312,7 +296,7 @@
                     </div>
                 </div>
                 <div id="login-btn" class="hidden md:block transition-opacity duration-300">
-                    <button onclick="showLoginModal()" class="nav-link text-white hover:text-green-200 px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                    <button onclick="showLoginMessage()" class="nav-link text-white hover:text-green-200 px-4 py-2 rounded-md text-sm font-medium flex items-center">
                         Login
                     </button>
                 </div>
@@ -337,7 +321,7 @@
                 <a href="#marketplace" class="block px-3 py-2 text-gray-700 hover:text-green-600">Marketplace</a>
                 <a href="#locator" class="block px-3 py-2 text-gray-700 hover:text-green-600">Find Machines</a>
                 <a href="#contact" class="block px-3 py-2 text-gray-700 hover:text-green-600">Contact</a>
-                <button onclick="showLoginModal()" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-green-600">
+                <button onclick="showLoginMessage()" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-green-600">
                     Login
                 </button>
             </div>
@@ -369,10 +353,10 @@
                     Join the smart e-waste revolution. Recycle your electronics at our AI-powered vending machines and earn eco-coins for sustainable rewards.
                 </p>
                 <div class="space-x-4">
-                    <button onclick="showLoginModal()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 pulse-green shadow-lg">
+                    <button onclick="showLoginMessage()" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 pulse-green shadow-lg">
                         Get Started
                     </button>
-                    <button onclick="showLoginModal()" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-600 font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
+                    <button onclick="showLoginMessage()" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-green-600 font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 shadow-lg">
                         Login
                     </button>
                 </div>
@@ -1106,119 +1090,107 @@
     <!-- End Main Content -->
 
     <script>
-        // Database System
-        class EcoCoinDatabase {
-            constructor() {
-                this.users = this.loadUsers();
-                this.currentUser = this.loadCurrentUser();
-                this.adminEmail = 'princehemanth753@gmail.com';
-            }
-
-            loadUsers() {
-                const users = localStorage.getItem('ecocoin_users');
-                return users ? JSON.parse(users) : [];
-            }
-
-            saveUsers() {
-                localStorage.setItem('ecocoin_users', JSON.stringify(this.users));
-            }
-
-            loadCurrentUser() {
-                const user = localStorage.getItem('ecocoin_current_user');
-                return user ? JSON.parse(user) : null;
-            }
-
-            saveCurrentUser(user) {
-                this.currentUser = user;
-                localStorage.setItem('ecocoin_current_user', JSON.stringify(user));
-            }
-
-            registerUser(userData) {
-                const existingUser = this.users.find(user => user.email === userData.email);
-                if (existingUser) {
-                    throw new Error('Email already registered');
-                }
-
-                const newUser = {
-                    id: Date.now().toString(),
-                    username: userData.username,
-                    email: userData.email,
-                    password: userData.password,
-                    phone: userData.phone || '',
-                    ecoCoins: 50, // Welcome bonus
-                    devicesRecycled: 0,
-                    co2Saved: 0,
-                    registrationDate: new Date().toISOString(),
-                    isAdmin: userData.email === 'princehemanth753@gmail.com'
-                };
-
-                this.users.push(newUser);
-                this.saveUsers();
-                return newUser;
-            }
-
-            loginUser(email, password) {
-                const user = this.users.find(u => u.email === email);
-                if (user && user.password === password) {
-                    this.saveCurrentUser(user);
-                    return user;
-                } else {
-                    throw new Error('Invalid email or password');
-                }
-            }
-
-            loginWithMobile(mobile, otp) {
-                // In real app, verify OTP with SMS service
-                if (otp === '123456') { // Demo OTP
-                    let user = this.users.find(u => u.phone === mobile);
-                    
-                    if (!user) {
-                        throw new Error('Mobile number not registered');
-                    }
-                    
-                    this.saveCurrentUser(user);
-                    return user;
-                } else {
-                    throw new Error('Invalid OTP');
-                }
-            }
-
-            logoutUser() {
-                this.currentUser = null;
-                localStorage.removeItem('ecocoin_current_user');
-            }
+        // Simple notification system
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+            
+            toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
+            toast.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span>${icon}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
 
-        // Initialize database
-        const database = new EcoCoinDatabase();
+        // Simple login message
+        function showLoginMessage() {
+            showToast('Login feature coming soon! Stay tuned for updates.', 'info');
+        }
 
-        // Smart Navigation Scroll Behavior
-        let lastScrollTop = 0;
-        let isScrollingDown = false;
-        
-        window.addEventListener('scroll', function() {
-            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            const nav = document.getElementById('main-nav');
-            
-            // Determine scroll direction
-            if (currentScroll > lastScrollTop && currentScroll > 100) {
-                // Scrolling down and past 100px
-                if (!isScrollingDown) {
-                    isScrollingDown = true;
-                    // Hide entire navigation bar
-                    nav.style.transform = 'translateY(-100%)';
-                }
-            } else if (currentScroll < lastScrollTop || currentScroll <= 100) {
-                // Scrolling up or at top of page
-                if (isScrollingDown || currentScroll <= 100) {
-                    isScrollingDown = false;
-                    // Show entire navigation bar
-                    nav.style.transform = 'translateY(0)';
-                }
-            }
-            
-            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
-        });
+        // Notification modals
+        function showNotifyModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                    <h3 class="text-xl font-bold mb-4">📧 Get Notified</h3>
+                    <p class="text-gray-600 mb-4">Enter your email to be notified when ECOCOIN machines are available in your area.</p>
+                    <input type="email" placeholder="Enter your email" class="w-full px-3 py-2 border rounded-md mb-4">
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-md">Cancel</button>
+                        <button onclick="showToast('Thank you! We\\'ll notify you soon.', 'success'); this.closest('.fixed').remove()" class="flex-1 bg-blue-500 text-white py-2 rounded-md">Notify Me</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showPartnerModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                    <h3 class="text-xl font-bold mb-4">🤝 Partner With Us</h3>
+                    <p class="text-gray-600 mb-4">Interested in hosting an ECOCOIN machine at your location?</p>
+                    <input type="text" placeholder="Your name" class="w-full px-3 py-2 border rounded-md mb-3">
+                    <input type="email" placeholder="Your email" class="w-full px-3 py-2 border rounded-md mb-3">
+                    <input type="text" placeholder="Location/Business name" class="w-full px-3 py-2 border rounded-md mb-4">
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-md">Cancel</button>
+                        <button onclick="showToast('Thank you! We\\'ll contact you soon.', 'success'); this.closest('.fixed').remove()" class="flex-1 bg-green-500 text-white py-2 rounded-md">Submit</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showNotifyRewardsModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                    <h3 class="text-xl font-bold mb-4">🎁 Rewards Coming Soon</h3>
+                    <p class="text-gray-600 mb-4">Be the first to know when our reward system launches!</p>
+                    <input type="email" placeholder="Enter your email" class="w-full px-3 py-2 border rounded-md mb-4">
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-md">Cancel</button>
+                        <button onclick="showToast('Thank you! We\\'ll notify you when rewards are available.', 'success'); this.closest('.fixed').remove()" class="flex-1 bg-yellow-500 text-white py-2 rounded-md">Notify Me</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showNotifyMarketplaceModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md mx-4">
+                    <h3 class="text-xl font-bold mb-4">🛒 Marketplace Coming Soon</h3>
+                    <p class="text-gray-600 mb-4">Get notified when our eco-friendly marketplace launches!</p>
+                    <input type="email" placeholder="Enter your email" class="w-full px-3 py-2 border rounded-md mb-4">
+                    <div class="flex space-x-3">
+                        <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-md">Cancel</button>
+                        <button onclick="showToast('Thank you! We\\'ll notify you when the marketplace is ready.', 'success'); this.closest('.fixed').remove()" class="flex-1 bg-green-500 text-white py-2 rounded-md">Notify Me</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
 
         // Mobile menu toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
@@ -1236,554 +1208,60 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
                 }
-                document.getElementById('mobile-menu').classList.add('hidden');
-            });
-        });
-
-        // Counter animation for dashboard
-        function animateCounter(element, target, duration = 2000) {
-            let start = 0;
-            const increment = target / (duration / 16);
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= target) {
-                    element.textContent = target;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(start);
-                }
-            }, 16);
-        }
-
-        // Get live dashboard data from database
-        function getLiveDashboardData() {
-            const allUsers = database.users;
-            const totalUsers = allUsers.length;
-            const totalDevices = allUsers.reduce((sum, u) => sum + u.devicesRecycled, 0);
-            const totalCO2 = allUsers.reduce((sum, u) => sum + u.co2Saved, 0);
-            const totalWaste = Math.floor(totalDevices * 0.5); // Estimate waste in tons
-            const activeMachines = Math.min(12, Math.max(1, Math.floor(totalUsers / 10))); // Dynamic machine count
-            
-            return {
-                totalWaste,
-                totalCO2,
-                totalUsers,
-                activeMachines
-            };
-        }
-
-        // Intersection Observer for dashboard counters
-        const dashboardObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const data = getLiveDashboardData();
-                    animateCounter(document.getElementById('total-waste'), data.totalWaste);
-                    animateCounter(document.getElementById('co2-saved'), data.totalCO2);
-                    animateCounter(document.getElementById('active-users'), data.totalUsers);
-                    animateCounter(document.getElementById('machines'), data.activeMachines);
-                    dashboardObserver.unobserve(entry.target);
-                }
-            });
-        });
-
-        const dashboardSection = document.getElementById('dashboard');
-        if (dashboardSection) {
-            dashboardObserver.observe(dashboardSection);
-        }
-
-        // Marketplace filter functionality
-        document.querySelectorAll('.marketplace-filter').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.marketplace-filter').forEach(btn => {
-                    btn.classList.remove('bg-green-500', 'text-white');
-                    btn.classList.add('bg-gray-200', 'text-gray-700');
-                });
-                this.classList.remove('bg-gray-200', 'text-gray-700');
-                this.classList.add('bg-green-500', 'text-white');
-
-                const category = this.getAttribute('data-category');
-                const products = document.querySelectorAll('.product-card');
-                
-                products.forEach(product => {
-                    if (category === 'all' || product.getAttribute('data-category') === category) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
             });
         });
 
         // Contact form submission
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            showSuccessMessage('Message sent successfully! We will get back to you soon.');
+            showToast('Thank you for your message! We\'ll get back to you soon.', 'success');
             this.reset();
         });
 
-        // Login Modal Function
-        function showLoginModal() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Welcome to ECOCOIN</h3>
-                    
-                    <!-- Login Method Selection -->
-                    <div class="mb-6">
-                        <div class="flex space-x-2 bg-gray-100 rounded-lg p-1">
-                            <button type="button" id="email-login-tab" class="login-tab active flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200">
-                                📧 Email & Password
-                            </button>
-                            <button type="button" id="mobile-login-tab" class="login-tab flex-1 py-2 px-4 rounded-md font-medium transition-all duration-200">
-                                📱 Mobile & OTP
-                            </button>
-                        </div>
-                    </div>
+        // Animate counters when dashboard section is visible
+        function animateCounters() {
+            const counters = [
+                { id: 'total-waste', target: 0 },
+                { id: 'co2-saved', target: 0 },
+                { id: 'active-users', target: 0 },
+                { id: 'machines', target: 0 }
+            ];
 
-                    <!-- Email Login Form -->
-                    <form id="email-login-form" class="login-form">
-                        <div class="mb-4">
-                            <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                            <input type="email" id="login-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your email">
-                        </div>
-                        <div class="mb-6">
-                            <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                            <input type="password" id="login-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password">
-                        </div>
-                        <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-md transition-colors font-medium mb-4">
-                            🔐 Login with Email
-                        </button>
-                    </form>
-
-                    <!-- Mobile Login Form -->
-                    <form id="mobile-login-form" class="login-form hidden">
-                        <div class="mb-4">
-                            <label for="login-mobile" class="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
-                            <div class="flex">
-                                <select class="px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50">
-                                    <option value="+91">🇮🇳 +91</option>
-                                    <option value="+1">🇺🇸 +1</option>
-                                    <option value="+44">🇬🇧 +44</option>
-                                </select>
-                                <input type="tel" id="login-mobile" required class="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter mobile number">
-                            </div>
-                        </div>
-                        <button type="submit" id="send-otp-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-md transition-colors font-medium mb-4">
-                            📲 Send OTP
-                        </button>
-                        
-                        <!-- OTP Input (Hidden initially) -->
-                        <div id="otp-input-section" class="hidden">
-                            <div class="mb-4">
-                                <label for="otp-code" class="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
-                                <input type="text" id="otp-code" maxlength="6" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-xl font-mono" placeholder="123456">
-                                <div class="text-center mt-2">
-                                    <span class="text-sm text-gray-600">Demo OTP: <strong>123456</strong></span>
-                                </div>
-                            </div>
-                            <button type="button" id="verify-otp-btn" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-md transition-colors font-medium">
-                                ✅ Verify OTP
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Action Buttons -->
-                    <div class="flex space-x-4 mb-4">
-                        <button type="button" id="close-modal" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                    
-                    <div class="text-center">
-                        <p class="text-gray-600 mb-2">Don't have an account?</p>
-                        <button type="button" id="register-btn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md transition-colors">
-                            Register New Account
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Tab switching functionality
-            const emailTab = document.getElementById('email-login-tab');
-            const mobileTab = document.getElementById('mobile-login-tab');
-            const emailForm = document.getElementById('email-login-form');
-            const mobileForm = document.getElementById('mobile-login-form');
-            
-            function switchToEmailTab() {
-                emailTab.classList.add('active');
-                mobileTab.classList.remove('active');
-                emailForm.classList.remove('hidden');
-                mobileForm.classList.add('hidden');
-            }
-            
-            function switchToMobileTab() {
-                mobileTab.classList.add('active');
-                emailTab.classList.remove('active');
-                mobileForm.classList.remove('hidden');
-                emailForm.classList.add('hidden');
-            }
-            
-            emailTab.addEventListener('click', switchToEmailTab);
-            mobileTab.addEventListener('click', switchToMobileTab);
-            
-            // Email login form submission
-            document.getElementById('email-login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                
-                try {
-                    let user = database.loginUser(email, password);
-                    modal.remove();
-                    
-                    if (user.email === 'princehemanth753@gmail.com') {
-                        showSuccessMessage(`Welcome Admin! Redirecting to Admin Dashboard...`);
-                        setTimeout(() => showAdminDashboard(user), 2000);
-                    } else {
-                        showSuccessMessage(`Welcome back, ${user.username}!`);
-                        setTimeout(() => showPersonalDashboard(user), 2000);
-                    }
-                    
-                } catch (error) {
-                    if (error.message === 'Invalid email or password') {
-                        // Check if email exists but password is wrong
-                        const existingUser = database.users.find(u => u.email === email);
-                        if (existingUser) {
-                            showErrorMessage('Incorrect password. Please try again.');
+            counters.forEach(counter => {
+                const element = document.getElementById(counter.id);
+                if (element) {
+                    let current = 0;
+                    const increment = counter.target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= counter.target) {
+                            element.textContent = counter.target;
+                            clearInterval(timer);
                         } else {
-                            // Email not found - prompt to register
-                            showErrorMessage('Email not found. Please register first.');
-                            setTimeout(() => {
-                                modal.remove();
-                                showRegisterModal(email); // Pre-fill email in registration
-                            }, 2000);
+                            element.textContent = Math.floor(current);
                         }
-                    } else {
-                        showErrorMessage(error.message);
-                    }
+                    }, 50);
                 }
-            });
-            
-            // Mobile OTP functionality
-            document.getElementById('mobile-login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const mobile = document.getElementById('login-mobile').value;
-                if (!mobile || mobile.length < 10) {
-                    showErrorMessage('Please enter a valid mobile number');
-                    return;
-                }
-                
-                document.getElementById('otp-input-section').classList.remove('hidden');
-                document.getElementById('send-otp-btn').textContent = '📲 OTP Sent!';
-                document.getElementById('send-otp-btn').disabled = true;
-                
-                showSuccessMessage('OTP sent to your mobile! Use: 123456');
-            });
-            
-            // Verify OTP
-            document.getElementById('verify-otp-btn').addEventListener('click', function() {
-                const mobile = document.getElementById('login-mobile').value;
-                const otp = document.getElementById('otp-code').value;
-                
-                if (otp !== '123456') {
-                    showErrorMessage('Invalid OTP. Please try again.');
-                    return;
-                }
-                
-                // Check if mobile number exists in database
-                const existingUser = database.users.find(u => u.phone === mobile);
-                
-                if (existingUser) {
-                    // User exists, log them in
-                    database.saveCurrentUser(existingUser);
-                    modal.remove();
-                    showSuccessMessage(`Welcome back, ${existingUser.username}!`);
-                    setTimeout(() => showPersonalDashboard(existingUser), 2000);
-                } else {
-                    // Mobile number not found - prompt to register
-                    modal.remove();
-                    showErrorMessage('Mobile number not registered. Please register first.');
-                    setTimeout(() => {
-                        showRegisterModal('', mobile); // Pre-fill mobile in registration
-                    }, 2000);
-                }
-            });
-            
-            // Close modal
-            document.getElementById('close-modal').addEventListener('click', function() {
-                modal.remove();
-            });
-            
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-            
-            // Register button
-            document.getElementById('register-btn').addEventListener('click', function() {
-                modal.remove();
-                showRegisterModal();
             });
         }
 
-        // Register Modal Function
-        function showRegisterModal(prefilledEmail = '', prefilledMobile = '') {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Create Your ECOCOIN Account</h3>
-                    <form id="register-form">
-                        <div class="mb-4">
-                            <label for="register-username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-                            <input type="text" id="register-username" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Choose a username">
-                        </div>
-                        <div class="mb-4">
-                            <label for="register-email" class="block text-sm font-medium text-gray-700 mb-2">Email (will be used as login)</label>
-                            <input type="email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your email" value="${prefilledEmail}">
-                        </div>
-                        <div class="mb-4">
-                            <label for="register-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number ${prefilledMobile ? '(Required)' : '(Optional)'}</label>
-                            <input type="tel" id="register-phone" ${prefilledMobile ? 'required' : ''} class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter phone number" value="${prefilledMobile}">
-                        </div>
-                        <div class="mb-6">
-                            <label for="register-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                            <input type="password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Create a password">
-                        </div>
-                        <div class="flex space-x-4 mb-4">
-                            <button type="submit" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md transition-colors">
-                                Create Account
-                            </button>
-                            <button type="button" id="close-register-modal" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors">
-                                Cancel
-                            </button>
-                        </div>
-                        <div class="text-center">
-                            <p class="text-gray-600 mb-2">Already have an account?</p>
-                            <button type="button" id="back-to-login" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors">
-                                Back to Login
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Register form submission
-            document.getElementById('register-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                try {
-                    const userData = {
-                        username: document.getElementById('register-username').value,
-                        email: document.getElementById('register-email').value,
-                        phone: document.getElementById('register-phone').value,
-                        password: document.getElementById('register-password').value
-                    };
-                    
-                    const newUser = database.registerUser(userData);
-                    database.saveCurrentUser(newUser);
-                    modal.remove();
-                    
-                    if (newUser.email === 'princehemanth753@gmail.com') {
-                        showSuccessMessage('Admin account created! Redirecting to Admin Dashboard...');
-                        setTimeout(() => showAdminDashboard(newUser), 2000);
-                    } else {
-                        showSuccessMessage('Account created successfully! Welcome to ECOCOIN!');
-                        setTimeout(() => showPersonalDashboard(newUser), 2000);
-                    }
-                    
-                } catch (error) {
-                    showErrorMessage(error.message);
+        // Intersection Observer for counter animation
+        const dashboardSection = document.getElementById('dashboard');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
                 }
             });
-            
-            // Close register modal
-            document.getElementById('close-register-modal').addEventListener('click', function() {
-                modal.remove();
-            });
-            
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-            
-            // Back to login
-            document.getElementById('back-to-login').addEventListener('click', function() {
-                modal.remove();
-                showLoginModal();
-            });
+        });
+
+        if (dashboardSection) {
+            observer.observe(dashboardSection);
         }
-
-        // Personal Dashboard Function
-        function showPersonalDashboard(user) {
-            document.body.innerHTML = `
-                <div class="min-h-screen bg-gradient-to-br from-amber-50 via-green-50 to-emerald-50">
-                    <!-- Personal Dashboard Header -->
-                    <header class="bg-white shadow-xl border-b-4 border-gradient-to-r from-amber-400 to-green-500">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div class="flex justify-between items-center h-20">
-                                <div class="flex items-center">
-                                    <div class="text-3xl font-bold text-amber-600 mr-12">
-                                        <span class="inline-flex items-center">
-                                            <span class="text-yellow-400 text-3xl mr-3">🪙</span>
-                                            <span>ECOCOIN</span>
-                                        </span>
-                                    </div>
-                                    <nav class="hidden lg:flex space-x-8">
-                                        <a href="#dashboard-home" class="text-gray-700 hover:text-amber-600 font-semibold text-lg transition-all duration-300 hover:scale-105">Dashboard</a>
-                                        <a href="#recycle-now" class="text-gray-700 hover:text-green-600 font-semibold text-lg transition-all duration-300 hover:scale-105">Recycle Now</a>
-                                        <a href="#my-rewards" class="text-gray-700 hover:text-amber-600 font-semibold text-lg transition-all duration-300 hover:scale-105">My Rewards</a>
-                                        <a href="#transaction-history" class="text-gray-700 hover:text-green-600 font-semibold text-lg transition-all duration-300 hover:scale-105">History</a>
-                                    </nav>
-                                </div>
-                                <div class="flex items-center space-x-6">
-                                    <button onclick="location.reload()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-lg">
-                                        🏠 Back to Main Site
-                                    </button>
-                                    <div class="text-right">
-                                        <div class="text-amber-600 font-bold text-lg">${user.username}</div>
-                                        <div class="text-sm text-gray-500">${user.email}</div>
-                                    </div>
-                                    <div class="bg-gradient-to-r from-amber-100 to-green-100 rounded-full p-4 transform hover:scale-110 transition-all duration-300">
-                                        <div class="text-3xl">👤</div>
-                                    </div>
-                                    <button onclick="database.logoutUser(); location.reload();" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-lg">
-                                        🚪 Logout
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <!-- Personal Dashboard Content -->
-                    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <!-- Welcome Section -->
-                        <div class="mb-8 text-center">
-                            <h1 class="text-4xl font-bold bg-gradient-to-r from-amber-600 to-green-600 bg-clip-text text-transparent mb-4">Welcome back, ${user.username}! 👋</h1>
-                            <p class="text-xl text-gray-600 font-medium">Track your eco-impact and manage your rewards</p>
-                        </div>
-
-
-
-                        <!-- Eco-Wallet Overview -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div class="bg-gradient-to-r from-amber-400 to-yellow-500 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold mb-2">${user.ecoCoins}</div>
-                                        <div class="text-amber-100 text-lg font-semibold">Eco-Coins Balance</div>
-                                    </div>
-                                    <div class="text-5xl opacity-80">🪙</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold mb-2">${user.devicesRecycled}</div>
-                                        <div class="text-green-100 text-lg font-semibold">Devices Recycled</div>
-                                    </div>
-                                    <div class="text-5xl opacity-80">📱</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-blue-500 to-cyan-600 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold mb-2">${user.co2Saved} kg</div>
-                                        <div class="text-blue-100 text-lg font-semibold">CO₂ Saved</div>
-                                    </div>
-                                    <div class="text-5xl opacity-80">🌍</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quick Actions -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-                            <button onclick="simulateRecycling()" class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-110 hover:-translate-y-2 group">
-                                <div class="text-5xl mb-3 group-hover:scale-125 transition-transform duration-300">📱</div>
-                                <div class="font-bold text-gray-900 mb-2 text-lg">Recycle Device</div>
-                                <div class="text-gray-600 text-sm">Simulate recycling process</div>
-                            </button>
-                            <button onclick="showDumpingOptions()" class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-110 hover:-translate-y-2 group">
-                                <div class="text-5xl mb-3 group-hover:scale-125 transition-transform duration-300">🗑️</div>
-                                <div class="font-bold text-gray-900 mb-2 text-lg">Dump Waste</div>
-                                <div class="text-gray-600 text-sm">Plastic bottles & E-waste</div>
-                            </button>
-                            <button onclick="showRewards()" class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-110 hover:-translate-y-2 group">
-                                <div class="text-5xl mb-3 group-hover:scale-125 transition-transform duration-300">🎁</div>
-                                <div class="font-bold text-gray-900 mb-2 text-lg">View Rewards</div>
-                                <div class="text-gray-600 text-sm">Redeem your eco-coins</div>
-                            </button>
-                            <button onclick="earnBonus()" class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-110 hover:-translate-y-2 group">
-                                <div class="text-5xl mb-3 group-hover:scale-125 transition-transform duration-300">💰</div>
-                                <div class="font-bold text-gray-900 mb-2 text-lg">Earn Bonus</div>
-                                <div class="text-gray-600 text-sm">Daily check-in rewards</div>
-                            </button>
-                            <button onclick="inviteFriends()" class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-110 hover:-translate-y-2 group">
-                                <div class="text-5xl mb-3 group-hover:scale-125 transition-transform duration-300">👥</div>
-                                <div class="font-bold text-gray-900 mb-2 text-lg">Invite Friends</div>
-                                <div class="text-gray-600 text-sm">Earn referral bonuses</div>
-                            </button>
-                        </div>
-
-                        <!-- Environmental Impact -->
-                        <div class="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 rounded-2xl p-8 text-white transform hover:scale-[1.02] transition-all duration-300 hover:shadow-xl">
-                            <h3 class="text-3xl font-bold mb-6 text-center">🌍 Your Environmental Impact</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                                <div class="transform hover:scale-110 transition-all duration-300 cursor-pointer">
-                                    <div class="text-5xl mb-3 hover:rotate-12 transition-transform duration-300">🌳</div>
-                                    <div class="text-3xl font-bold mb-2">${Math.floor(user.co2Saved / 10)}</div>
-                                    <div class="text-green-100 text-lg font-semibold">Trees Equivalent</div>
-                                </div>
-                                <div class="transform hover:scale-110 transition-all duration-300 cursor-pointer">
-                                    <div class="text-5xl mb-3 hover:rotate-12 transition-transform duration-300">⚡</div>
-                                    <div class="text-3xl font-bold mb-2">${Math.floor(user.devicesRecycled * 2.5)} kWh</div>
-                                    <div class="text-green-100 text-lg font-semibold">Energy Saved</div>
-                                </div>
-                                <div class="transform hover:scale-110 transition-all duration-300 cursor-pointer">
-                                    <div class="text-5xl mb-3 hover:rotate-12 transition-transform duration-300">💧</div>
-                                    <div class="text-3xl font-bold mb-2">${Math.floor(user.devicesRecycled * 15)} L</div>
-                                    <div class="text-green-100 text-lg font-semibold">Water Saved</div>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-                </div>
-            `;
-        }
-
-        // Admin Dashboard Function
-        function showAdminDashboard(user) {
-            const allUsers = database.users;
-            const totalUsers = allUsers.length;
-            const totalCoins = allUsers.reduce((sum, u) => sum + u.ecoCoins, 0);
-            const totalDevices = allUsers.reduce((sum, u) => sum + u.devicesRecycled, 0);
-            const totalCO2 = allUsers.reduce((sum, u) => sum + u.co2Saved, 0);
-
-            document.body.innerHTML = `
-                <div class="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50">
-                    <!-- Admin Header -->
-                    <header class="bg-white shadow-xl border-b-4 border-yellow-500">
-                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div class="flex justify-between items-center h-20">
-                                <div class="flex items-center">
-                                    <div class="text-2xl font-bold text-yellow-600 mr-8">
-                                        <span class="inline-flex items-center">
-                                            <span class="text-yellow-400 text-2xl mr-2">🪙</span>
-                                            <span>ECOCOIN</span>
-                                            <span class="ml-2 text-sm bg-red-100 text-red-800 px-2 py-1 rounded">ADMIN</span>
-                                        </span>
-                                    </div>
-                                    <nav class="hidden md:flex space-x-6">
-                                        <a href="#admin-dashboard" class="text-gray-700 hover:text-yellow-600 font-medium">Dashboard</a>
-                                        <a href="#user-management" class="text-gray-700 hover:text-yellow-600 font-medium">
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990aa29610173d28',t:'MTc2MDgxNzc2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990ae33971f6ca8c',t:'MTc2MDgyMDQxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
