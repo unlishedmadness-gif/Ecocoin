@@ -16,6 +16,151 @@
             font-family: 'Montserrat', sans-serif;
         }
         
+        /* Loading Animation Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fbbf24 0%, #10b981 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 0.8s ease-in-out 3.5s forwards;
+        }
+        
+        .coin-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .falling-coin {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 80px;
+            animation: coinFall 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+                       coinSpin 1.5s linear;
+        }
+        
+        .ecocoin-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            opacity: 0;
+            animation: textEmerge 1s ease-out 1.8s forwards;
+        }
+        
+        .loading-dots {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: dotBounce 1.4s ease-in-out infinite;
+        }
+        
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        .dot:nth-child(3) { animation-delay: 0s; }
+        
+        @keyframes coinFall {
+            0% {
+                top: -100px;
+                transform: translateX(-50%) scale(0.5);
+            }
+            70% {
+                top: 90px;
+                transform: translateX(-50%) scale(1.2);
+            }
+            85% {
+                top: 80px;
+                transform: translateX(-50%) scale(0.95);
+            }
+            100% {
+                top: 85px;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+        
+        @keyframes coinSpin {
+            0% { transform: translateX(-50%) rotateY(0deg); }
+            100% { transform: translateX(-50%) rotateY(720deg); }
+        }
+        
+        @keyframes textEmerge {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+                filter: blur(10px);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translate(-50%, -50%) scale(1.1);
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                filter: blur(0px);
+            }
+        }
+        
+        @keyframes dotBounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                visibility: visible;
+            }
+            100% {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        .main-content {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-in-out 4s forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         .gradient-bg {
             background: linear-gradient(135deg, #fbbf24 0%, #10b981 100%);
         }
@@ -126,37 +271,54 @@
     </style>
 </head>
 <body class="min-h-full bg-gray-50">
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="coin-container">
+            <div class="falling-coin">🪙</div>
+            <div class="ecocoin-text">ECOCOIN</div>
+        </div>
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+    <nav id="main-nav" class="bg-green-800 shadow-lg fixed w-full top-0 z-50 transition-transform duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <div class="text-2xl font-bold text-green-600">
+                    <div class="text-2xl font-bold text-white">
                         <span class="inline-flex items-center">
-                            <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-2">E</span>
+                            <span class="text-yellow-400 text-2xl mr-2">🪙</span>
                             <span>ECOCOIN</span>
                         </span>
                     </div>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#home" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                        <a href="#about" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
-                        <a href="#founders" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Founders</a>
-                        <a href="#why-ecocoin" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Why ECOCOIN</a>
-                        <a href="#how-it-works" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">How It Works</a>
-                        <a href="#rewards" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Rewards</a>
-                        <a href="#dashboard" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-                        <a href="#marketplace" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Marketplace</a>
-                        <a href="#locator" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Find Machines</a>
-                        <a href="#contact" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
-                        <button onclick="showLoginModal()" class="nav-link text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                            Login
-                        </button>
+                <div id="nav-links" class="hidden md:flex flex-1 justify-center transition-opacity duration-300">
+                    <div class="flex items-baseline space-x-4">
+                        <a href="#home" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="#about" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="#founders" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Founders</a>
+                        <a href="#why-ecocoin" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Why ECOCOIN</a>
+                        <a href="#how-it-works" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">How It Works</a>
+                        <a href="#rewards" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Rewards</a>
+                        <a href="#dashboard" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <a href="#marketplace" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium bg-yellow-500 border border-yellow-400">🛒 Marketplace</a>
+                        <a href="#locator" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Find Machines</a>
+                        <a href="#contact" class="nav-link text-white hover:text-green-100 px-3 py-2 rounded-md text-sm font-medium bg-green-900 hover:bg-black">📞 Contact: +91 9353377859</a>
                     </div>
                 </div>
+                <div id="login-btn" class="hidden md:block transition-opacity duration-300">
+                    <button onclick="showLoginModal()" class="nav-link text-white hover:text-green-200 px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                        Login
+                    </button>
+                </div>
                 <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-yellow-600">
+                    <button id="mobile-menu-btn" class="text-white hover:text-green-200">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -600,95 +762,103 @@
                 <p class="text-xl text-gray-600">Shop sustainable and refurbished products with your eco-coins</p>
             </div>
             
-            <div class="flex justify-center mb-8">
-                <div class="flex space-x-4">
-                    <button class="marketplace-filter hover-button bg-green-500 text-white px-4 py-2 rounded-md" data-category="all">All Products</button>
-                    <button class="marketplace-filter hover-button bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300" data-category="refurbished">Refurbished</button>
-                    <button class="marketplace-filter hover-button bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300" data-category="eco-friendly">Eco-Friendly</button>
-                    <button class="marketplace-filter hover-button bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300" data-category="accessories">Accessories</button>
+            <!-- Marketplace Status Notice -->
+            <div class="text-center mb-8">
+                <div class="bg-gradient-to-r from-blue-50 to-green-50 border-2 border-blue-200 rounded-xl p-6 max-w-2xl mx-auto">
+                    <div class="text-6xl mb-4">🚧</div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">🛒 Marketplace Coming Soon</h3>
+                    <p class="text-lg text-gray-700 mb-4">
+                        Our eco-friendly marketplace is currently under development and not available yet.
+                    </p>
+                    <div class="bg-white rounded-lg p-4 mb-4">
+                        <p class="text-gray-600 font-medium">
+                            We're working hard to bring you amazing sustainable products. Please check back soon!
+                        </p>
+                    </div>
+                    <button onclick="showNotifyMarketplaceModal()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg transition-colors font-semibold">
+                        📧 Notify Me When Available
+                    </button>
                 </div>
             </div>
             
-            <div class="grid md:grid-cols-4 gap-6" id="marketplace-products">
-                <div class="product-card bg-white hover-card rounded-lg shadow-lg overflow-hidden cursor-pointer" data-category="refurbished">
+            <!-- Preview Products (Disabled) -->
+            <div class="flex justify-center mb-8">
+                <div class="flex space-x-4">
+                    <button class="marketplace-filter hover-button bg-gray-300 text-gray-500 px-4 py-2 rounded-md cursor-not-allowed" disabled>All Products</button>
+                    <button class="marketplace-filter hover-button bg-gray-200 text-gray-400 px-4 py-2 rounded-md cursor-not-allowed" disabled>Refurbished</button>
+                    <button class="marketplace-filter hover-button bg-gray-200 text-gray-400 px-4 py-2 rounded-md cursor-not-allowed" disabled>Eco-Friendly</button>
+                    <button class="marketplace-filter hover-button bg-gray-200 text-gray-400 px-4 py-2 rounded-md cursor-not-allowed" disabled>Accessories</button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6 opacity-60" id="marketplace-products">
+                <div class="product-card bg-gray-100 rounded-lg shadow-lg overflow-hidden cursor-not-allowed" data-category="refurbished">
                     <div class="p-6">
-                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-green-600 font-bold text-2xl">P</span>
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-gray-400 font-bold text-2xl">P</span>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Refurbished iPhone 12</h4>
-                        <p class="text-gray-600 mb-4">Like new condition, 1-year warranty</p>
+                        <h4 class="text-lg font-bold text-gray-500 mb-2">Refurbished iPhone 12</h4>
+                        <p class="text-gray-400 mb-4">Like new condition, 1-year warranty</p>
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-yellow-600 font-bold">1,200 coins</span>
+                            <span class="text-gray-400 font-bold">1,200 coins</span>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors hover-button">
-                                Redeem with Coins
-                            </button>
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors hover-button">
-                                Add to Cart
+                            <button disabled class="w-full bg-gray-300 text-gray-500 py-2 rounded-md cursor-not-allowed">
+                                Coming Soon
                             </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="product-card bg-white hover-card rounded-lg shadow-lg overflow-hidden cursor-pointer" data-category="eco-friendly">
+                <div class="product-card bg-gray-100 rounded-lg shadow-lg overflow-hidden cursor-not-allowed" data-category="eco-friendly">
                     <div class="p-6">
-                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-green-600 font-bold text-2xl">B</span>
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-gray-400 font-bold text-2xl">B</span>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Bamboo Phone Case</h4>
-                        <p class="text-gray-600 mb-4">100% biodegradable, multiple sizes</p>
+                        <h4 class="text-lg font-bold text-gray-500 mb-2">Bamboo Phone Case</h4>
+                        <p class="text-gray-400 mb-4">100% biodegradable, multiple sizes</p>
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-yellow-600 font-bold">150 coins</span>
+                            <span class="text-gray-400 font-bold">150 coins</span>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors hover-button">
-                                Redeem with Coins
-                            </button>
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors hover-button">
-                                Add to Cart
+                            <button disabled class="w-full bg-gray-300 text-gray-500 py-2 rounded-md cursor-not-allowed">
+                                Coming Soon
                             </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="product-card bg-white hover-card rounded-lg shadow-lg overflow-hidden cursor-pointer" data-category="refurbished">
+                <div class="product-card bg-gray-100 rounded-lg shadow-lg overflow-hidden cursor-not-allowed" data-category="refurbished">
                     <div class="p-6">
-                        <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-yellow-600 font-bold text-2xl">L</span>
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-gray-400 font-bold text-2xl">L</span>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Refurbished MacBook Air</h4>
-                        <p class="text-gray-600 mb-4">M1 chip, excellent condition</p>
+                        <h4 class="text-lg font-bold text-gray-500 mb-2">Refurbished MacBook Air</h4>
+                        <p class="text-gray-400 mb-4">M1 chip, excellent condition</p>
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-yellow-600 font-bold">2,500 coins</span>
+                            <span class="text-gray-400 font-bold">2,500 coins</span>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors hover-button">
-                                Redeem with Coins
-                            </button>
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors hover-button">
-                                Add to Cart
+                            <button disabled class="w-full bg-gray-300 text-gray-500 py-2 rounded-md cursor-not-allowed">
+                                Coming Soon
                             </button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="product-card bg-white hover-card rounded-lg shadow-lg overflow-hidden cursor-pointer" data-category="accessories">
+                <div class="product-card bg-gray-100 rounded-lg shadow-lg overflow-hidden cursor-not-allowed" data-category="accessories">
                     <div class="p-6">
-                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-green-600 font-bold text-2xl">S</span>
+                        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-gray-400 font-bold text-2xl">S</span>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2">Solar Power Bank</h4>
-                        <p class="text-gray-600 mb-4">20,000mAh with solar charging</p>
+                        <h4 class="text-lg font-bold text-gray-500 mb-2">Solar Power Bank</h4>
+                        <p class="text-gray-400 mb-4">20,000mAh with solar charging</p>
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-yellow-600 font-bold">400 coins</span>
+                            <span class="text-gray-400 font-bold">400 coins</span>
                         </div>
                         <div class="space-y-2">
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors hover-button">
-                                Redeem with Coins
-                            </button>
-                            <button onclick="handleMarketplaceRedeem()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors hover-button">
-                                Add to Cart
+                            <button disabled class="w-full bg-gray-300 text-gray-500 py-2 rounded-md cursor-not-allowed">
+                                Coming Soon
                             </button>
                         </div>
                     </div>
@@ -889,7 +1059,7 @@
                 <div>
                     <div class="text-2xl font-bold text-yellow-400 mb-4">
                         <span class="inline-flex items-center">
-                            <span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-2">E</span>
+                            <span class="text-yellow-400 text-2xl mr-2">🪙</span>
                             ECOCOIN
                         </span>
                     </div>
@@ -943,6 +1113,8 @@
             </div>
         </div>
     </footer>
+    </div>
+    <!-- End Main Content -->
 
     <script>
         // Database System
@@ -1030,6 +1202,34 @@
 
         // Initialize database
         const database = new EcoCoinDatabase();
+
+        // Smart Navigation Scroll Behavior
+        let lastScrollTop = 0;
+        let isScrollingDown = false;
+        
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const nav = document.getElementById('main-nav');
+            
+            // Determine scroll direction
+            if (currentScroll > lastScrollTop && currentScroll > 100) {
+                // Scrolling down and past 100px
+                if (!isScrollingDown) {
+                    isScrollingDown = true;
+                    // Hide entire navigation bar
+                    nav.style.transform = 'translateY(-100%)';
+                }
+            } else if (currentScroll < lastScrollTop || currentScroll <= 100) {
+                // Scrolling up or at top of page
+                if (isScrollingDown || currentScroll <= 100) {
+                    isScrollingDown = false;
+                    // Show entire navigation bar
+                    nav.style.transform = 'translateY(0)';
+                }
+            }
+            
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+        });
 
         // Mobile menu toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
@@ -1446,11 +1646,8 @@
                                 <div class="flex items-center">
                                     <div class="text-3xl font-bold text-amber-600 mr-12">
                                         <span class="inline-flex items-center">
-                                            <span class="relative">
-                                                🪙
-                                                <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-800" style="margin-top: -2px;">E</span>
-                                            </span>
-                                            <span class="ml-3">ECOCOIN</span>
+                                            <span class="text-yellow-400 text-3xl mr-3">🪙</span>
+                                            <span>ECOCOIN</span>
                                         </span>
                                     </div>
                                     <nav class="hidden lg:flex space-x-8">
@@ -1592,563 +1789,11 @@
                                 <div class="flex items-center">
                                     <div class="text-2xl font-bold text-yellow-600 mr-8">
                                         <span class="inline-flex items-center">
-                                            <span class="relative">
-                                                🪙
-                                                <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-800" style="margin-top: -2px;">E</span>
-                                            </span>
-                                            <span class="ml-2">ECOCOIN</span>
+                                            <span class="text-yellow-400 text-2xl mr-2">🪙</span>
+                                            <span>ECOCOIN</span>
                                             <span class="ml-2 text-sm bg-red-100 text-red-800 px-2 py-1 rounded">ADMIN</span>
                                         </span>
                                     </div>
                                     <nav class="hidden md:flex space-x-6">
                                         <a href="#admin-dashboard" class="text-gray-700 hover:text-yellow-600 font-medium">Dashboard</a>
-                                        <a href="#user-management" class="text-gray-700 hover:text-yellow-600 font-medium">Users</a>
-                                        <a href="#system-stats" class="text-gray-700 hover:text-yellow-600 font-medium">System</a>
-                                        <a href="#reports" class="text-gray-700 hover:text-yellow-600 font-medium">Reports</a>
-                                    </nav>
-                                </div>
-                                <div class="flex items-center space-x-4">
-                                    <button onclick="location.reload()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors font-medium">
-                                        🏠 Back to Main Site
-                                    </button>
-                                    <div class="text-right">
-                                        <div class="text-yellow-600 font-bold">${user.username}</div>
-                                        <div class="text-sm text-gray-500">Administrator</div>
-                                    </div>
-                                    <div class="bg-yellow-100 rounded-full p-3">
-                                        <div class="text-2xl">👑</div>
-                                    </div>
-                                    <button onclick="database.logoutUser(); location.reload();" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                                        🚪 Logout
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <!-- Admin Dashboard Content -->
-                    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                        <!-- Welcome Section -->
-                        <div class="mb-8">
-                            <h1 class="text-4xl font-bold text-gray-900 mb-2">Admin Control Panel 🎛️</h1>
-                            <p class="text-xl text-gray-600">Manage ECOCOIN system and monitor performance</p>
-                        </div>
-
-                        <!-- System Overview -->
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold">${totalUsers}</div>
-                                        <div class="text-blue-100">Total Users</div>
-                                    </div>
-                                    <div class="text-4xl">👥</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl p-6 text-white">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold">${totalCoins.toLocaleString()}</div>
-                                        <div class="text-yellow-100">Total Eco-Coins</div>
-                                    </div>
-                                    <div class="text-4xl">🪙</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-6 text-white">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold">${totalDevices}</div>
-                                        <div class="text-green-100">Devices Recycled</div>
-                                    </div>
-                                    <div class="text-4xl">📱</div>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl p-6 text-white">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <div class="text-3xl font-bold">${totalCO2} kg</div>
-                                        <div class="text-purple-100">CO₂ Saved</div>
-                                    </div>
-                                    <div class="text-4xl">🌍</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- User Management -->
-                        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6">👥 User Management</h3>
-                            <div class="overflow-x-auto">
-                                <table class="w-full table-auto">
-                                    <thead>
-                                        <tr class="bg-gray-50">
-                                            <th class="px-4 py-2 text-left">Username</th>
-                                            <th class="px-4 py-2 text-left">Email</th>
-                                            <th class="px-4 py-2 text-left">Eco-Coins</th>
-                                            <th class="px-4 py-2 text-left">Devices</th>
-                                            <th class="px-4 py-2 text-left">CO₂ Saved</th>
-                                            <th class="px-4 py-2 text-left">Joined</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${allUsers.map(u => `
-                                            <tr class="border-b hover:bg-gray-50">
-                                                <td class="px-4 py-2 font-medium">${u.username}</td>
-                                                <td class="px-4 py-2">${u.email}</td>
-                                                <td class="px-4 py-2 text-yellow-600 font-bold">${u.ecoCoins}</td>
-                                                <td class="px-4 py-2">${u.devicesRecycled}</td>
-                                                <td class="px-4 py-2">${u.co2Saved} kg</td>
-                                                <td class="px-4 py-2">${new Date(u.registrationDate).toLocaleDateString()}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- System Controls -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-lg font-bold text-gray-900 mb-4">🎛️ System Controls</h4>
-                                <div class="space-y-3">
-                                    <button onclick="showSuccessMessage('System backup completed!')" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md transition-colors">
-                                        💾 Backup Database
-                                    </button>
-                                    <button onclick="showSuccessMessage('System maintenance scheduled!')" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md transition-colors">
-                                        🔧 Schedule Maintenance
-                                    </button>
-                                    <button onclick="showSuccessMessage('All users notified!')" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors">
-                                        📢 Send Notification
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-lg font-bold text-gray-900 mb-4">📊 Quick Stats</h4>
-                                <div class="space-y-3">
-                                    <div class="flex justify-between">
-                                        <span>Active Machines:</span>
-                                        <span class="font-bold text-green-600">12</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>System Uptime:</span>
-                                        <span class="font-bold text-blue-600">99.9%</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>Daily Collections:</span>
-                                        <span class="font-bold text-purple-600">47</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>Revenue Today:</span>
-                                        <span class="font-bold text-yellow-600">$2,340</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-lg font-bold text-gray-900 mb-4">⚡ Quick Actions</h4>
-                                <div class="space-y-3">
-                                    <button onclick="addBonusCoins()" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-md transition-colors">
-                                        🎁 Add Bonus Coins
-                                    </button>
-                                    <button onclick="generateReport()" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 rounded-md transition-colors">
-                                        📈 Generate Report
-                                    </button>
-                                    <button onclick="exportData()" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-md transition-colors">
-                                        📤 Export Data
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-                </div>
-            `;
-        }
-
-        // Utility Functions
-        function simulateRecycling() {
-            const user = database.currentUser;
-            if (user) {
-                const coinsEarned = Math.floor(Math.random() * 100) + 50;
-                const co2Saved = Math.floor(Math.random() * 5) + 2;
-                
-                user.ecoCoins += coinsEarned;
-                user.devicesRecycled += 1;
-                user.co2Saved += co2Saved;
-                
-                database.users = database.users.map(u => u.id === user.id ? user : u);
-                database.saveUsers();
-                database.saveCurrentUser(user);
-                
-                showSuccessMessage(`Device recycled! +${coinsEarned} Eco-Coins earned! 🎉`);
-                setTimeout(() => showPersonalDashboard(user), 2000);
-            }
-        }
-
-        function showRewards() {
-            showSuccessMessage('Rewards feature coming soon! 🎁');
-        }
-
-        function earnBonus() {
-            const user = database.currentUser;
-            if (user) {
-                user.ecoCoins += 25;
-                database.users = database.users.map(u => u.id === user.id ? user : u);
-                database.saveUsers();
-                database.saveCurrentUser(user);
-                
-                showSuccessMessage('Daily bonus: +25 Eco-Coins! 🎉');
-                setTimeout(() => showPersonalDashboard(user), 2000);
-            }
-        }
-
-        function inviteFriends() {
-            showSuccessMessage('Invite feature coming soon! 👥');
-        }
-
-        function showDumpingOptions() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 transform scale-95 animate-pulse">
-                    <div class="text-center mb-8">
-                        <h3 class="text-3xl font-bold text-gray-900 mb-4">🗑️ Choose Waste Type</h3>
-                        <p class="text-lg text-gray-600">Select the type of waste you want to recycle</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Plastic Bottles Option -->
-                        <button onclick="dumpPlasticBottles(); document.body.removeChild(this.closest('.fixed'))" class="group bg-gradient-to-br from-blue-50 to-cyan-50 hover:from-blue-100 hover:to-cyan-100 rounded-2xl p-8 border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-                            <div class="text-center">
-                                <!-- Plastic Bottle SVG -->
-                                <div class="mb-6 flex justify-center">
-                                    <svg class="w-24 h-24 text-blue-500 group-hover:text-blue-600 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M9 2C8.45 2 8 2.45 8 3V4H7C6.45 4 6 4.45 6 5S6.45 6 7 6H8V7C8 7.55 8.45 8 9 8H15C15.55 8 16 7.55 16 7V6H17C17.55 6 18 5.55 18 5S17.55 4 17 4H16V3C16 2.45 15.55 2 15 2H9ZM9 9V20C9 21.1 9.9 22 11 22H13C14.1 22 15 21.1 15 20V9H9Z"/>
-                                    </svg>
-                                </div>
-                                <h4 class="text-2xl font-bold text-blue-700 mb-3 group-hover:text-blue-800">Plastic Bottles</h4>
-                                <p class="text-blue-600 mb-4 group-hover:text-blue-700">Recycle plastic bottles and containers</p>
-                                <div class="bg-blue-100 rounded-lg p-3 group-hover:bg-blue-200 transition-colors duration-300">
-                                    <span class="text-blue-800 font-semibold">💰 Earn 20-40 Eco-Coins</span>
-                                </div>
-                            </div>
-                        </button>
-
-                        <!-- E-Waste Option -->
-                        <button onclick="dumpEWaste(); document.body.removeChild(this.closest('.fixed'))" class="group bg-gradient-to-br from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 rounded-2xl p-8 border-2 border-green-200 hover:border-green-400 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
-                            <div class="text-center">
-                                <!-- E-Waste SVG -->
-                                <div class="mb-6 flex justify-center">
-                                    <svg class="w-24 h-24 text-green-500 group-hover:text-green-600 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M4 6H20V8H18V19C18 20.1 17.1 21 16 21H8C6.9 21 6 20.1 6 19V8H4V6ZM8 8V19H16V8H8ZM9.5 10H10.5V17H9.5V10ZM13.5 10H14.5V17H13.5V10ZM7 3V4H4V6H20V4H17V3C17 1.9 16.1 1 15 1H9C7.9 1 7 1.9 7 3ZM9 3H15V4H9V3Z"/>
-                                        <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                                        <path d="M10 14L14 10M14 14L10 10" stroke="currentColor" stroke-width="1" fill="none"/>
-                                    </svg>
-                                </div>
-                                <h4 class="text-2xl font-bold text-green-700 mb-3 group-hover:text-green-800">Electronic Waste</h4>
-                                <p class="text-green-600 mb-4 group-hover:text-green-700">Recycle phones, laptops & electronics</p>
-                                <div class="bg-green-100 rounded-lg p-3 group-hover:bg-green-200 transition-colors duration-300">
-                                    <span class="text-green-800 font-semibold">💰 Earn 50-150 Eco-Coins</span>
-                                </div>
-                            </div>
-                        </button>
-                    </div>
-                    
-                    <div class="text-center mt-8">
-                        <button onclick="document.body.removeChild(this.closest('.fixed'))" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-8 py-3 rounded-xl transition-colors duration-300 font-semibold">
-                            ❌ Cancel
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Add click outside to close
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-        }
-
-        function dumpPlasticBottles() {
-            const user = database.currentUser;
-            if (user) {
-                const coinsEarned = Math.floor(Math.random() * 21) + 20; // 20-40 coins
-                const co2Saved = Math.floor(Math.random() * 2) + 1; // 1-2 kg
-                
-                user.ecoCoins += coinsEarned;
-                user.devicesRecycled += 1; // Count as recycled item
-                user.co2Saved += co2Saved;
-                
-                database.users = database.users.map(u => u.id === user.id ? user : u);
-                database.saveUsers();
-                database.saveCurrentUser(user);
-                
-                showSuccessMessage(`🍶 Plastic bottles recycled! +${coinsEarned} Eco-Coins earned! 🌱`);
-                setTimeout(() => showPersonalDashboard(user), 2000);
-            }
-        }
-
-        function dumpEWaste() {
-            const user = database.currentUser;
-            if (user) {
-                const coinsEarned = Math.floor(Math.random() * 101) + 50; // 50-150 coins
-                const co2Saved = Math.floor(Math.random() * 8) + 3; // 3-10 kg
-                
-                user.ecoCoins += coinsEarned;
-                user.devicesRecycled += 1;
-                user.co2Saved += co2Saved;
-                
-                database.users = database.users.map(u => u.id === user.id ? user : u);
-                database.saveUsers();
-                database.saveCurrentUser(user);
-                
-                showSuccessMessage(`⚡ E-waste recycled! +${coinsEarned} Eco-Coins earned! 🔋`);
-                setTimeout(() => showPersonalDashboard(user), 2000);
-            }
-        }
-
-        function addBonusCoins() {
-            database.users.forEach(user => {
-                user.ecoCoins += 100;
-            });
-            database.saveUsers();
-            showSuccessMessage('100 bonus coins added to all users! 🎁');
-        }
-
-        function generateReport() {
-            showSuccessMessage('Monthly report generated successfully! 📈');
-        }
-
-        function exportData() {
-            showSuccessMessage('Data exported to CSV format! 📤');
-        }
-
-        // Message Functions
-        function showSuccessMessage(message) {
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        function showErrorMessage(message) {
-            const toast = document.createElement('div');
-            toast.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-
-        // Reward Redemption Handler
-        function handleRewardRedeem() {
-            if (database.currentUser) {
-                // User is logged in, redirect to their dashboard
-                if (database.currentUser.email === 'princehemanth753@gmail.com') {
-                    showAdminDashboard(database.currentUser);
-                } else {
-                    showPersonalDashboard(database.currentUser);
-                }
-                showSuccessMessage('Redirecting to your dashboard to redeem rewards! 🎁');
-            } else {
-                // User not logged in, show login modal
-                showSuccessMessage('Please login to redeem rewards! 🔐');
-                setTimeout(() => {
-                    showLoginModal();
-                }, 1000);
-            }
-        }
-
-        // Notify Rewards Modal Function
-        function showNotifyRewardsModal() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">🎁 Get Notified About Rewards</h3>
-                    <p class="text-gray-600 mb-6">Be the first to know when our reward system launches! We'll send you an email as soon as rewards become available.</p>
-                    <form id="notify-rewards-form">
-                        <div class="mb-4">
-                            <label for="rewards-notify-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                            <input type="email" id="rewards-notify-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Enter your email">
-                        </div>
-                        <div class="mb-6">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="mr-2" checked>
-                                <span class="text-sm text-gray-600">I want to receive updates about new rewards and special offers</span>
-                            </label>
-                        </div>
-                        <div class="flex space-x-4">
-                            <button type="submit" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-md transition-colors font-semibold">
-                                📧 Notify Me
-                            </button>
-                            <button type="button" onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            document.getElementById('notify-rewards-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                modal.remove();
-                showSuccessMessage('Thank you! We\'ll notify you as soon as rewards are available! 🎁');
-            });
-            
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-        }
-
-        // Marketplace Redemption Handler
-        function handleMarketplaceRedeem() {
-            if (database.currentUser) {
-                // User is logged in, redirect to their dashboard
-                if (database.currentUser.email === 'princehemanth753@gmail.com') {
-                    showAdminDashboard(database.currentUser);
-                } else {
-                    showPersonalDashboard(database.currentUser);
-                }
-                showSuccessMessage('Redirecting to your dashboard to complete purchase! 🛒');
-            } else {
-                // User not logged in, show login modal
-                showSuccessMessage('Please login to shop in the marketplace! 🔐');
-                setTimeout(() => {
-                    showLoginModal();
-                }, 1000);
-            }
-        }
-
-        // Notification Modal Function
-        function showNotifyModal() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">📧 Get Notified</h3>
-                    <p class="text-gray-600 mb-6">We'll let you know as soon as ECOCOIN machines are available in your area!</p>
-                    <form id="notify-form">
-                        <div class="mb-4">
-                            <label for="notify-email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                            <input type="email" id="notify-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email">
-                        </div>
-                        <div class="mb-6">
-                            <label for="notify-location" class="block text-sm font-medium text-gray-700 mb-2">Preferred Location</label>
-                            <select id="notify-location" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Select location</option>
-                                <option value="downtown">Downtown Mall</option>
-                                <option value="university">University Campus</option>
-                                <option value="techpark">Tech Park</option>
-                                <option value="other">Other (specify in message)</option>
-                            </select>
-                        </div>
-                        <div class="flex space-x-4">
-                            <button type="submit" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md transition-colors">
-                                Notify Me
-                            </button>
-                            <button type="button" onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            document.getElementById('notify-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                modal.remove();
-                showSuccessMessage('Thank you! We\'ll notify you when machines are available in your area! 📧');
-            });
-            
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-        }
-
-        // Partner Modal Function
-        function showPartnerModal() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">🤝 Partner With ECOCOIN</h3>
-                    <p class="text-gray-600 mb-6">Interested in hosting an ECOCOIN machine at your location? Let's discuss partnership opportunities!</p>
-                    <form id="partner-form">
-                        <div class="mb-4">
-                            <label for="partner-name" class="block text-sm font-medium text-gray-700 mb-2">Business Name</label>
-                            <input type="text" id="partner-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter business name">
-                        </div>
-                        <div class="mb-4">
-                            <label for="partner-email" class="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
-                            <input type="email" id="partner-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter contact email">
-                        </div>
-                        <div class="mb-4">
-                            <label for="partner-type" class="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
-                            <select id="partner-type" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                <option value="">Select business type</option>
-                                <option value="mall">Shopping Mall</option>
-                                <option value="university">University/School</option>
-                                <option value="office">Office Complex</option>
-                                <option value="retail">Retail Store</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-6">
-                            <label for="partner-message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                            <textarea id="partner-message" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Tell us about your location and partnership interest"></textarea>
-                        </div>
-                        <div class="flex space-x-4">
-                            <button type="submit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-md transition-colors">
-                                Submit Partnership Request
-                            </button>
-                            <button type="button" onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-md transition-colors">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            document.getElementById('partner-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                modal.remove();
-                showSuccessMessage('Partnership request submitted! Our team will contact you within 48 hours! 🤝');
-            });
-            
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.remove();
-                }
-            });
-        }
-
-        // Check if user is already logged in
-        if (database.currentUser) {
-            if (database.currentUser.email === 'princehemanth753@gmail.com') {
-                showAdminDashboard(database.currentUser);
-            } else {
-                showPersonalDashboard(database.currentUser);
-            }
-        }
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990a295f83668fcd',t:'MTc2MDgxMjgwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+                                        <a href="#user-management" class="text-gray-700 hover:text-yellow-600 font-medium"><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990a996325bb9a77',t:'MTc2MDgxNzM4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
