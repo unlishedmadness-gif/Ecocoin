@@ -309,7 +309,7 @@
                         <a href="#dashboard" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
                         <a href="#marketplace" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium bg-yellow-500 border border-yellow-400">🛒 Marketplace</a>
                         <a href="#locator" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Find Machines</a>
-                        <a href="#contact" class="nav-link text-white hover:text-green-100 px-3 py-2 rounded-md text-sm font-medium bg-green-900 hover:bg-black">📞 Contact: +91 9353377859</a>
+                        <a href="#contact" class="nav-link text-white hover:text-green-200 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
                     </div>
                 </div>
                 <div id="login-btn" class="hidden md:block transition-opacity duration-300">
@@ -1000,17 +1000,7 @@
                                 <p class="text-gray-600">info@ecocoin.com</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
-                                <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="font-medium">Phone</p>
-                                <p class="text-gray-600">+91 9353377859</p>
-                            </div>
-                        </div>
+
                         <div class="flex items-center space-x-3">
                             <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                                 <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
@@ -1796,4 +1786,5 @@
                                     </div>
                                     <nav class="hidden md:flex space-x-6">
                                         <a href="#admin-dashboard" class="text-gray-700 hover:text-yellow-600 font-medium">Dashboard</a>
-                                        <a href="#user-management" class="text-gray-700 hover:text-yellow-600 font-medium"><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990a996325bb9a77',t:'MTc2MDgxNzM4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+                                        <a href="#user-management" class="text-gray-700 hover:text-yellow-600 font-medium">
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'990aa29610173d28',t:'MTc2MDgxNzc2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
